@@ -1,7 +1,8 @@
 # Kirino Media Server
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
+[![Go Report Card](https://goreportcard.com/badge/github.com/kirino-org/kirino)](https://goreportcard.com/report/github.com/kirino-org/kirino)
+![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/kirino-org/kirino?style=flat-square)
+![Lines of code](https://img.shields.io/tokei/lines/github/kirino-org/kirino?style=flat-square)
+
 Lightweight, modular, self-hosted media server
 
 Now beginning to release some source code. More on the way! :)

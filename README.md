@@ -1,5 +1,4 @@
 # Kirino Media Server
 Lightweight, modular, self-hosted media server
 
-**Kirino is still a work in progress.**
-The source will be posted soon.
+Now beginning to release some source code. More on the way! :)

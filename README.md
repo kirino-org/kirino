@@ -6,9 +6,12 @@ Lightweight, modular, self-hosted media server
 
 Now beginning to release some source code. More on the way! :)
 
-## Contributors ✨
+## Contributors
 
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+Thank you to everyone who has contributed to my project. Your support means a lot!
+If you're interested in contributing, please see [CONTRIBUTING.md](https://github.com/kirino-org/kirino/blob/main/CONTRIBUTING.md) to get started.
+
+["All Contributors" Emoji Key](https://allcontributors.org/docs/en/emoji-key)
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
@@ -24,4 +27,4 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+We use [All Contributors](https://allcontributors.org/) to keep track of contributors.

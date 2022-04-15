@@ -7,3 +7,4 @@ Affero GNU Public License v3:
 MIT License:
     models/
     pkg/anidb/
+    pkg/scsc/

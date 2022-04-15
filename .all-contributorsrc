@@ -1,0 +1,26 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "lncndev",
+      "name": "Lincoln (he/him)",
+      "avatar_url": "https://avatars.githubusercontent.com/u/91053683?v=4",
+      "profile": "https://git.lncn.dev/lncn",
+      "contributions": [
+        "code",
+        "doc",
+        "infra"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "kirino",
+  "projectOwner": "kirino-org",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}

@@ -1,6 +1,8 @@
+
 # Kirino Media Server
+
 [![Go Report Card](https://goreportcard.com/badge/github.com/kirino-org/kirino)](https://goreportcard.com/report/github.com/kirino-org/kirino)
-![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/kirino-org/kirino?style=flat-square)
+[![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/kirino-org/kirino?style=flat-square)](https://codeclimate.com/github/kirino-org/kirino/maintainability)
 ![Lines of code](https://img.shields.io/tokei/lines/github/kirino-org/kirino?style=flat-square)
 
 Lightweight, modular, self-hosted media server

@@ -10,9 +10,6 @@ import (
 	"github.com/kirino-org/kirino/pkg/scsc"
 )
 
-// Key: TRQRGRK3GZNMQNHJFWGD
-// Secret: G6A$UfQxf##BjJ6gckHubbACQcjveqtgTU5MumwD
-
 func SearchByTerm(query string) {
 	req, err := http.NewRequest("GET", "https://api.podcastindex.org/api/1.0/search/byterm?q="+query, nil)
 	if err != nil {

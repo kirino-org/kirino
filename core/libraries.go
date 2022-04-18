@@ -8,10 +8,11 @@ import (
 type LibraryType int
 
 const (
-	LibraryTypeAnime    LibraryType = 1
-	LibraryTypeManga    LibraryType = 2
-	LibraryTypeMusic    LibraryType = 3
-	LibraryTypePodcasts LibraryType = 4
+	LibraryTypeAnime      LibraryType = 1
+	LibraryTypeManga      LibraryType = 2
+	LibraryTypeMusic      LibraryType = 3
+	LibraryTypePodcasts   LibraryType = 4
+	LibraryTypeTubeVideos LibraryType = 5
 )
 
 type Library struct {
@@ -33,6 +34,7 @@ func (l *Library) Scan() {
 	for _, dir := range l.MediaDirs {
 		filepath.WalkDir(dir, func(path string, d fs.DirEntry, err error) error {
 			filepath.Ext(path)
+			return nil
 		})
 	}
 }

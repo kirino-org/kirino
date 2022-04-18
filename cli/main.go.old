@@ -1,0 +1,36 @@
+package main
+
+import (
+	"fmt"
+
+	"github.com/blevesearch/bleve"
+	"github.com/kirino-org/kirino/pkg/anidb"
+)
+
+func main() {
+	ts := anidb.DecodeTitles()
+	for _, t := range ts.Anime {
+		for _, v := range t.Titles {
+			fmt.Println(
+				v.Language,
+				v.Type,
+				v.Title,
+			)
+		}
+	}
+
+	mapping := bleve.NewIndexMapping()
+
+	index, err := bleve.New("./bleve_db", mapping)
+	if err != nil {
+		panic(err)
+	}
+
+	index.NewBatch().Index(
+		"anime",
+		ts.Anime,
+	)
+
+	stats, _ := index.Stats().MarshalJSON()
+	fmt.Println(string(stats))
+}

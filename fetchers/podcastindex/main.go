@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/kirino-org/kirino/pkg/scsc"
+	"github.com/kirino-org/kirino/internal/scsc"
 )
 
 func SearchByTerm(query string) {

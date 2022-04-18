@@ -1,11 +1,14 @@
 package core
 
-import "net/http"
+import (
+	"fmt"
+	"net/http"
+)
 
 type Service struct {
 	Id   string
 	Name string
-	Mux  http.ServeMux
+	Mux  *http.ServeMux
 }
 
 func (core *Core) RegisterService(service *Service) {
@@ -19,6 +22,7 @@ func (core *Core) RunServices() {
 	for _, s := range core.services {
 		mux.HandleFunc(
 			"/"+s.Id+"/",
+
 			func(w http.ResponseWriter, r *http.Request) {
 				s.Mux.ServeHTTP(w, r)
 			},
@@ -26,6 +30,8 @@ func (core *Core) RunServices() {
 	}
 
 	go http.ListenAndServe(":6319", mux)
+
+	fmt.Println("Kirino Media Server started successfully!")
 
 	select {}
 }

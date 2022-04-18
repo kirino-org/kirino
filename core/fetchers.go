@@ -1,9 +1,9 @@
 package core
 
 type Feed struct {
-	Id          string
-	Title       string
-	Description string
+	Id          string `json:"id"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
 }
 
 type Fetcher struct {
@@ -12,7 +12,7 @@ type Fetcher struct {
 	Name        string      `json:"name"`
 	Description string      `json:"description"`
 
-	SearchFunc func(query string)
+	SearchFunc func(query string) []Feed
 }
 
 func (c *Core) RegisterFetcher(fetcher *Fetcher) {

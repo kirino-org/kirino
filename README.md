@@ -7,7 +7,29 @@
 
 Lightweight, modular, self-hosted media server
 
-Now beginning to release some source code. More on the way! :)
+ > Still in development. Expect **breaking changes** to the `main` branch without notice.
+
+## Usage
+
+### Prerequisites
+ - A GNU/Linux machine
+ - These commands:
+   - `go`
+   - `bash`
+   - `wget`
+ - Basic Golang experience
+
+### Install
+```
+wget https://raw.githubusercontent.com/kirino-org/kirino/main/install.sh
+chmod +x install.sh
+./install.sh
+```
+
+### Run
+```
+kirino
+```
 
 ## Contributors
 

@@ -45,11 +45,15 @@ type Video struct {
 	IsUpcoming      bool   `json:"isUpcoming"`
 }
 
-func Init(c *core.Core) {
-	c.Libraries()
+var Fetcher = &core.Fetcher{
+	Id:          "invidious",
+	Type:        core.LibraryTypeTubeVideos,
+	Name:        "Invidious",
+	Description: "Alternate frontend for YouTube.",
+	SearchFunc:  searchChannel,
 }
 
-func searchChannel(query string) (results []Channel) {
+func searchChannel(query string) []core.Feed {
 	urlValues := url.Values{
 		"q": {
 			query,
@@ -60,7 +64,7 @@ func searchChannel(query string) (results []Channel) {
 		},
 	}
 
-	res, err := http.Get("https://iv.lncn.dev/api/v1/search?" + urlValues.Encode())
+	res, err := http.Get(InvidiousURL + "/api/v1/search?" + urlValues.Encode())
 	if err != nil {
 		panic(err)
 	}
@@ -70,20 +74,27 @@ func searchChannel(query string) (results []Channel) {
 		panic(err)
 	}
 
+	var results []Channel
+
 	if err := json.Unmarshal(rawJson, &results); err != nil {
 		panic(err)
 	}
 
+	var feeds []core.Feed
+
 	for _, c := range results {
-		fmt.Println(c.Name, "("+c.Id+")")
-		videosForChannel(c)
+		feeds = append(feeds, core.Feed{
+			Id:          c.Id,
+			Title:       c.Name,
+			Description: c.Description,
+		})
 	}
 
-	return
+	return feeds
 }
 
 func videosForChannel(channel Channel) []Video {
-	res, err := http.Get("https://iv.lncn.dev/api/v1/channels/" + channel.Id + "/videos")
+	res, err := http.Get(InvidiousURL + "/api/v1/channels/" + channel.Id + "/videos")
 	if err != nil {
 		panic(err)
 	}

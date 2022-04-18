@@ -10,6 +10,7 @@ type Core struct {
 	providers []*Provider
 	libraries []*Library
 	services  []*Service
+	fetchers  []*Fetcher
 }
 
 func New() *Core {

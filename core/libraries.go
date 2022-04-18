@@ -1,5 +1,10 @@
 package core
 
+import (
+	"io/fs"
+	"path/filepath"
+)
+
 type LibraryType int
 
 const (
@@ -10,6 +15,24 @@ const (
 )
 
 type Library struct {
-	Type LibraryType `json:"type"`
-	Name string      `json:"name"`
+	Id        string      `json:"id"`
+	Type      LibraryType `json:"type"`
+	Name      string      `json:"name"`
+	MediaDirs []string    `json:"media_dirs"`
+}
+
+func (core *Core) NewLibrary(library *Library) {
+	core.libraries = append(core.libraries, library)
+}
+
+func (core *Core) Libraries() []*Library {
+	return core.libraries
+}
+
+func (l *Library) Scan() {
+	for _, dir := range l.MediaDirs {
+		filepath.WalkDir(dir, func(path string, d fs.DirEntry, err error) error {
+			filepath.Ext(path)
+		})
+	}
 }

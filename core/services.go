@@ -8,10 +8,11 @@ type Service struct {
 	Mux  http.ServeMux
 }
 
-func (core *Core) NewService(service *Service) {
+func (core *Core) RegisterService(service *Service) {
 	core.services = append(core.services, service)
 }
 
+// RunServices starts up all services registered on core
 func (core *Core) RunServices() {
 	mux := http.NewServeMux()
 
@@ -24,5 +25,7 @@ func (core *Core) RunServices() {
 		)
 	}
 
-	http.ListenAndServe(":6319", mux)
+	go http.ListenAndServe(":6319", mux)
+
+	select {}
 }

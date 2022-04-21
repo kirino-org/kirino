@@ -3,35 +3,37 @@ package core
 import (
 	"fmt"
 	"net/http"
+	"strings"
 )
 
 type Service struct {
-	Id   string
+	ID   string
 	Name string
-	Mux  *http.ServeMux
+	Func func(c *Core) *http.ServeMux `json:"-"`
 }
 
-func (core *Core) RegisterService(service *Service) {
-	core.services = append(core.services, service)
+// Register a service with Core c
+func (c *Core) RegisterService(service *Service) {
+	c.services = append(c.services, service)
+	c.service[service.ID] = service
 }
 
-// RunServices starts up all services registered on core
-func (core *Core) RunServices() {
-	mux := http.NewServeMux()
+// RunServices starts up all services on Core c registered with RegisterService
+func RunServices(c *Core) {
+	for _, s := range c.services {
+		http.Handle(
+			"/"+s.ID+"/",
 
-	for _, s := range core.services {
-		mux.HandleFunc(
-			"/"+s.Id+"/",
-
-			func(w http.ResponseWriter, r *http.Request) {
-				s.Mux.ServeHTTP(w, r)
-			},
+			http.StripPrefix(
+				strings.TrimRight("/"+s.ID+"/", "/"),
+				s.Func(c),
+			),
 		)
 	}
 
-	go http.ListenAndServe(":6319", mux)
+	go http.ListenAndServe(":6319", nil)
 
-	fmt.Println("Kirino Media Server started successfully!")
+	fmt.Println(`KMS is running on port 6319`)
 
 	select {}
 }

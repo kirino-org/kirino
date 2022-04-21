@@ -2,15 +2,26 @@ package podcastindex
 
 import (
 	"crypto/sha1"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
 	"time"
 
+	"github.com/kirino-org/kirino/core"
 	"github.com/kirino-org/kirino/internal/scsc"
 )
 
-func SearchByTerm(query string) {
+var Fetcher = &core.Fetcher{
+	ID:          "podcastindex",
+	Type:        core.LibraryTypePodcasts,
+	Name:        "PodcastIndex.org",
+	Description: "Non-profit podcast index",
+
+	SearchFunc: searchByTerm,
+}
+
+func searchByTerm(query string) []*core.Feed {
 	req, err := http.NewRequest("GET", "https://api.podcastindex.org/api/1.0/search/byterm?q="+query, nil)
 	if err != nil {
 		panic(err)
@@ -46,9 +57,21 @@ func SearchByTerm(query string) {
 		panic(err)
 	}
 
-	fmt.Println(
-		string(
-			rawJson,
-		),
-	)
+	var results Results
+	if err := json.Unmarshal(rawJson, &results); err != nil {
+		panic(err)
+	}
+
+	var feeds []*core.Feed
+
+	for _, f := range results.Feeds {
+		feeds = append(feeds, &core.Feed{
+			ID:          scsc.IntStr(f.Id),
+			CoverImage:  f.Image,
+			Title:       f.Title,
+			Description: f.Description,
+		})
+	}
+
+	return feeds
 }

@@ -1,0 +1,21 @@
+{{ define "title" }}Search results{{ end }}
+
+{{ define "content" }}
+<table>
+    {{ $ = . }}
+    {{ range .Data }}
+        <tr>
+            <td>
+                <img src="{{ .CoverImage }}" style="width:10rem" />
+            </td>
+            <td>
+                <h4>{{ .Title }}</h4>
+                <p>{{ .Description }}</p>
+            </td>
+            <td>
+                <form action="{{ $.Config.BaseURL }}/"></form>
+            </td>
+        </tr>
+    {{ end }}
+</table>
+{{ end }}

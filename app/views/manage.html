@@ -1,0 +1,34 @@
+{{ define "title" }}Manage{{ end }}
+
+{{ define "bool" }}
+<input name="{{.ID}}" id="{{.ID}}" type="checkbox" {{ if eq .Value true }}selected{{ end }} />
+<label for="{{.ID}}">{{.Name}}</label>
+<br />
+{{ end }}
+
+{{ define "content" }}
+<h2>Server Management</h2>
+
+<form>
+    <h3>Services</h3>
+    <p><strong>WARNING!</strong> Enabling or disabling services requires a rebuild in order to take effect.</p>
+
+    <label>
+        <input name="api" type="checkbox" checked />
+        <span>Enable REST API</span>
+    </label><br>
+
+    <label>
+        <input name="autofetcher" type="checkbox" />
+        <span>Enable autofetcher</span>
+    </label><br>
+
+    <h3>KMS Options</h3>
+
+    <!--  -->
+    
+    <br>
+
+    <input type="submit" value="Save" />
+</form>
+{{ end }}

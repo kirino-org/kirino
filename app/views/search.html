@@ -1,0 +1,30 @@
+{{ define "title" }}Fetchers{{ end }}
+
+{{ define "content" }}
+<h2>Search</h2>
+<form method="post" action="{{ .Config.BaseURL }}/search">
+    <p>
+        <label for="fetcher">Fetcher</label><br>
+        <select name="fetcher" id="fetcher">
+            <option selected disabled>
+                Select a fetcher
+            </option>
+            {{ range .Data }}
+            <option value="{{ .ID }}">
+                {{ .Name }}
+            </option>
+            {{ end }}
+        </select>
+    </p>
+
+    <p>
+        <label for="query">Query</label><br>
+        <input type="text" name="query" id="query" />
+    </p>
+
+    <p>
+        <input type="submit" value="Search" />
+    </p>
+</form>
+<p>Some fetchers may be slow, especially anything that does screen scraping. <strong>Please wait patiently.</strong></p>
+{{ end }}

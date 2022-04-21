@@ -1,0 +1,18 @@
+{{ define "title" }}Libraries{{ end }}
+
+{{ define "content" }}
+<h2>Libraries</h2>
+<a class="button" href="{{ .Config.BaseURL }}/libraries/new">New</a>
+
+<table>
+{{ $ = . }}
+{{ range .Data }}
+    <tr>
+        <td>{{.Name}}</td>
+        <td>
+            <a href="{{ $.Config.BaseURL }}/library?id={{ .ID }}">Open</a>
+        </td>
+    </tr>
+{{ end }}
+</table>
+{{ end }}

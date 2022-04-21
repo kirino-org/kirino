@@ -4,24 +4,30 @@ import (
 	"bytes"
 	"html/template"
 	"net/http"
+	"runtime"
 	"strings"
 
 	"github.com/kirino-org/kirino/core"
+	"github.com/kirino-org/kirino/internal/scsc"
 )
-
-type renderConfig struct {
-	Title   string
-	BaseURL string
-}
-
-type rendererData struct {
-	Config renderConfig
-	Data   interface{}
-}
 
 func renderTmpl(w http.ResponseWriter, r *http.Request, tmpl string, data interface{}) {
 	var render bytes.Buffer
-	t := template.New("").Funcs(template.FuncMap{})
+	t := template.New("").Funcs(template.FuncMap{
+		"GoVersion": func() string {
+			return runtime.Version()
+		},
+		"GoNumGoroutine": func() string {
+			return scsc.IntStr(
+				runtime.NumGoroutine(),
+			)
+		},
+		"GoNumCPU": func() string {
+			return scsc.IntStr(
+				runtime.NumCPU(),
+			)
+		},
+	})
 
 	_, err := t.ParseFiles("./app/views/"+tmpl+".html", "./app/views/base.html")
 	if err != nil {
@@ -36,40 +42,91 @@ func renderTmpl(w http.ResponseWriter, r *http.Request, tmpl string, data interf
 	render.Reset()
 }
 
-var Service = &core.Service{
-	Id:   "app",
-	Name: "Kirino Web",
-	Mux:  AppRouter(),
-}
+func addRoute(r *http.ServeMux, path, formTmpl, actionTmpl string, params []string, dataFunc func(vals map[string]string) interface{}) {
+	r.HandleFunc(path, func(w http.ResponseWriter, r *http.Request) {
+		vals := make(map[string]string)
 
-func AppRouter() *http.ServeMux {
-	r := http.NewServeMux()
+		for _, v := range params {
+			vals[v] = r.FormValue(v)
+		}
 
-	config := renderConfig{
-		Title:   "Kirino Web",
-		BaseURL: "/app",
-	}
+		data := dataFunc(vals)
 
-	r.HandleFunc("/app/home", func(w http.ResponseWriter, r *http.Request) {
-		renderTmpl(w, r, "home", rendererData{
+		var tmpl string
+		switch r.Method {
+		case "GET":
+			tmpl = formTmpl
+		case "POST":
+			tmpl = actionTmpl
+		default:
+			tmpl = "dash"
+		}
+
+		renderTmpl(w, r, tmpl, rendererData{
 			Config: config,
+			Data:   data,
 		})
 	})
+}
 
-	r.HandleFunc("/app/about", func(w http.ResponseWriter, r *http.Request) {
-		renderTmpl(w, r, "about", rendererData{
-			Config: config,
-		})
+func dataFuncNil(vals map[string]string) interface{} {
+	return nil
+}
+
+func AppRouter(c *core.Core) *http.ServeMux {
+	r := http.NewServeMux()
+
+	addRoute(r, "/dash", "dash", "dash", nil, dataFuncNil)
+
+	addRoute(r, "/about", "about", "dash", nil, dataFuncNil)
+
+	addRoute(r, "/manage", "manage", "dash", nil, dataFuncNil)
+
+	addRoute(r, "/search", "search", "results", []string{
+		"fetcher",
+		"query",
+	}, func(v map[string]string) interface{} {
+		if v["fetcher"] != "" && v["query"] != "" {
+			return c.Fetcher(v["fetcher"]).SearchFunc(v["query"])
+		} else {
+			return c.Fetchers()
+		}
+	})
+
+	addRoute(r, "/libraries", "libraries", "dash", nil, func(vals map[string]string) interface{} {
+		return c.Libraries()
+	})
+	addRoute(r, "/libraries/new", "new_library", "libraries", []string{
+		"name",
+	}, func(v map[string]string) interface{} {
+		if v["name"] != "" {
+			c.NewLibrary(&core.Library{
+				ID:   scsc.IntStr(len(c.Libraries())),
+				Type: core.LibraryTypeMusic,
+				Name: v["name"],
+			})
+
+			return c.Libraries()
+		} else {
+			return nil
+		}
+	})
+
+	addRoute(r, "/library", "library", "dash", []string{
+		"id",
+	}, func(v map[string]string) interface{} {
+		if v["id"] != "" {
+			return c.Library(v["id"])
+		} else {
+			return nil
+		}
 	})
 
 	r.Handle(
-		"/app/assets/",
-
+		"/assets/",
 		http.StripPrefix(
-			strings.TrimRight("/app/assets/", "/"),
-			http.FileServer(
-				http.Dir("./app/assets"),
-			),
+			strings.TrimRight("/assets/", "/"),
+			http.FileServer(http.Dir("./app/assets")),
 		),
 	)
 

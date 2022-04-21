@@ -10,18 +10,23 @@ import (
 	"github.com/kirino-org/kirino/core"
 )
 
-type Channel struct {
-	Type            string `json:"type"`
-	Name            string `json:"author"`
-	Id              string `json:"authorId"`
-	Url             string `json:"authorUrl"`
+type channel struct {
+	Type   string `json:"type"`
+	Name   string `json:"author"`
+	Id     string `json:"authorId"`
+	Url    string `json:"authorUrl"`
+	Avatar []struct {
+		URL    string `json:"url"`
+		Width  int    `json:"width"`
+		Height int    `json:"height"`
+	} `json:"authorThumbnails"`
 	SubCount        int    `json:"subCount"`
 	VideoCount      int    `json:"videoCount"`
 	Description     string `json:"description"`
 	DescriptionHtml string `json:"descriptionHtml"`
 }
 
-type Video struct {
+type video struct {
 	Type            string `json:"type"`
 	Title           string `json:"title"`
 	Id              string `json:"videoId"`
@@ -46,14 +51,14 @@ type Video struct {
 }
 
 var Fetcher = &core.Fetcher{
-	Id:          "invidious",
+	ID:          "invidious",
 	Type:        core.LibraryTypeTubeVideos,
 	Name:        "Invidious",
-	Description: "Alternate frontend for YouTube.",
+	Description: "Alternate frontend for YouTube",
 	SearchFunc:  searchChannel,
 }
 
-func searchChannel(query string) []core.Feed {
+func searchChannel(query string) []*core.Feed {
 	urlValues := url.Values{
 		"q": {
 			query,
@@ -74,17 +79,18 @@ func searchChannel(query string) []core.Feed {
 		panic(err)
 	}
 
-	var results []Channel
+	var results []channel
 
 	if err := json.Unmarshal(rawJson, &results); err != nil {
 		panic(err)
 	}
 
-	var feeds []core.Feed
+	var feeds []*core.Feed
 
 	for _, c := range results {
-		feeds = append(feeds, core.Feed{
-			Id:          c.Id,
+		feeds = append(feeds, &core.Feed{
+			ID:          c.Id,
+			CoverImage:  c.Avatar[len(c.Avatar)-1].URL,
 			Title:       c.Name,
 			Description: c.Description,
 		})
@@ -93,7 +99,7 @@ func searchChannel(query string) []core.Feed {
 	return feeds
 }
 
-func videosForChannel(channel Channel) []Video {
+func videosForChannel(channel channel) []video {
 	res, err := http.Get(InvidiousURL + "/api/v1/channels/" + channel.Id + "/videos")
 	if err != nil {
 		panic(err)
@@ -104,7 +110,7 @@ func videosForChannel(channel Channel) []Video {
 		panic(err)
 	}
 
-	var results []Video
+	var results []video
 	if err := json.Unmarshal(rawJson, &results); err != nil {
 		panic(err)
 	}

@@ -3,14 +3,23 @@ package core
 import "github.com/kirino-org/kirino/models"
 
 type Provider struct {
-	Id          string      `json:"id"`
+	ID          string      `json:"id"`
 	Type        LibraryType `json:"type"`
 	Name        string      `json:"name"`
 	Description string      `json:"description"`
 
-	QueryFunc func(query string) []models.Series
+	QueryFunc func(query string) []models.Series `json:"-"`
 }
 
 func (c *Core) RegisterProvider(provider *Provider) {
 	c.providers = append(c.providers, provider)
+	c.provider[provider.ID] = provider
+}
+
+func (c *Core) Providers() []*Provider {
+	return c.providers
+}
+
+func (c *Core) Provider(id string) *Provider {
+	return c.provider[id]
 }

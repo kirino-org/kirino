@@ -78,7 +78,9 @@ func AppRouter(c *core.Core) *http.ServeMux {
 
 	addRoute(r, "/dash", "dash", "dash", nil, dataFuncNil)
 
-	addRoute(r, "/about", "about", "dash", nil, dataFuncNil)
+	addRoute(r, "/about", "about", "dash", nil, func(vals map[string]string) interface{} {
+		return License
+	})
 
 	addRoute(r, "/manage", "manage", "dash", nil, dataFuncNil)
 

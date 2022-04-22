@@ -38,11 +38,11 @@ func APIRouter(c *core.Core) *http.ServeMux {
 	})
 
 	addAPIEndpoint(r, "/fetchers", func() interface{} {
-		return c.ListFetchers()
+		return c.Fetchers()
 	})
 
 	addAPIEndpoint(r, "/libraries", func() interface{} {
-		return c.ListLibraries()
+		return c.Libraries()
 	})
 
 	return r

@@ -5,5 +5,5 @@ type Scanner struct {
 	Type LibraryType `json:"type"`
 	Name string      `json:"name"`
 
-	Func func(library *Library) []string `json:"-"`
+	Func func(library *Library) `json:"-"`
 }

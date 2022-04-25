@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	github.com/gorilla/mux v1.8.0
+	github.com/segmentio/ksuid v1.0.4
 	github.com/webview/webview v0.0.0-20220415202704-5f6562f358d9
 	golang.org/x/crypto v0.0.0-20220411220226-7b82a4e95df4
 	golang.org/x/exp/shiny v0.0.0-20220414153411-bcd21879b8fd

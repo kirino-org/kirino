@@ -3,4 +3,26 @@
 {{ define "content" }}
 <h2>{{ .Data.Name }}</h2>
 <p>Library ID: {{ .Data.ID }}</p>
+
+{{ $ = . }}
+
+<table>
+    {{ range .Data.AllSeries }}
+        <tr>
+            <!-- <td>
+                <img src="{{.Image}}" style="width:10rem" />
+            </td> -->
+            <td>
+                {{ if eq .Title "" }}
+                    {{ .OriginalTitle }}
+                {{ else }}
+                    {{ .Title }}
+                {{ end }}
+            </td>
+            <td>
+                <a href="/app/series?lid={{$.Data.ID}}&sid={{.ID}}">Open</a>
+            </td>
+        </tr>
+    {{ end }}
+</table>
 {{ end }}

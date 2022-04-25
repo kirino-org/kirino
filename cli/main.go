@@ -17,5 +17,16 @@ func main() {
 	c.RegisterService(app.Service)
 	c.RegisterService(api.Service)
 
+	c.NewLibrary(&core.Library{
+		ID:   0,
+		Type: core.LibraryTypeAnime,
+		Name: "Example Library",
+		MediaDirs: []string{
+			"./test",
+		},
+	})
+
+	c.Library(0).Scan()
+
 	core.RunServices(c)
 }

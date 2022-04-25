@@ -1,7 +1,9 @@
+<!DOCTYPE html>
 <html>
     <head>
         <title>{{ template "title" . }} &mdash; Kiririn</title>
-        <link href="/app/assets/style.css" rel="stylesheet" />
+        <link rel="stylesheet" href="/app/assets/style.css" />
+        <link rel="stylesheet" href="https://unpkg.com/plyr@3/dist/plyr.css" />
     </head>
     <body>
         <header>
@@ -12,6 +14,9 @@
                 <a href="/app/manage">Manage</a>
                 <a href="/app/about">About</a>
             </nav>
+            <p>
+                <strong>THIS IS BETA SOFTWARE. EXPECT BUGS.</strong>
+            </p>
         </header>
 
         {{ template "content" . }}

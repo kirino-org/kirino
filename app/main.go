@@ -2,8 +2,11 @@ package app
 
 import (
 	"bytes"
+	"fmt"
 	"html/template"
+	"io"
 	"net/http"
+	"os"
 	"runtime"
 	"strings"
 
@@ -103,7 +106,7 @@ func AppRouter(c *core.Core) *http.ServeMux {
 	}, func(v map[string]string) interface{} {
 		if v["name"] != "" {
 			c.NewLibrary(&core.Library{
-				ID:   scsc.IntStr(len(c.Libraries())),
+				ID:   len(c.Libraries()),
 				Type: core.LibraryTypeMusic,
 				Name: v["name"],
 			})
@@ -118,10 +121,63 @@ func AppRouter(c *core.Core) *http.ServeMux {
 		"id",
 	}, func(v map[string]string) interface{} {
 		if v["id"] != "" {
-			return c.Library(v["id"])
+			return c.Library(
+				scsc.StrInt(v["id"]),
+			)
 		} else {
 			return nil
 		}
+	})
+
+	addRoute(r, "/series", "series", "dash", []string{
+		"lid",
+		"sid",
+	}, func(v map[string]string) interface{} {
+		series := c.Library(
+			scsc.StrInt(v["lid"]),
+		).Series(
+			scsc.StrInt(v["sid"]),
+		)
+
+		return struct {
+			Series  *core.Series
+			Library string
+		}{
+			Series:  series,
+			Library: v["lid"],
+		}
+	})
+
+	addRoute(r, "/play", "play", "play", []string{
+		"lid",
+		"sid",
+		"iid",
+	}, func(v map[string]string) interface{} {
+		return fmt.Sprintf(`/app/stream?lid=%s&sid=%s&iid=%s`, v["lid"], v["sid"], v["iid"])
+	})
+
+	r.HandleFunc("/stream", func(w http.ResponseWriter, r *http.Request) {
+		lid := scsc.StrInt(r.FormValue("lid"))
+		sid := scsc.StrInt(r.FormValue("sid"))
+		iid := scsc.StrInt(r.FormValue("iid"))
+
+		f, err := os.Open(c.Library(lid).
+			Series(sid).
+			Item(iid).
+			Path,
+		)
+		if err != nil {
+			panic(err)
+		}
+
+		data, err := io.ReadAll(f)
+		if err != nil {
+			panic(err)
+		}
+
+		w.Header().Add("Content-Type", "video/mp4")
+		w.WriteHeader(200)
+		w.Write(data)
 	})
 
 	r.Handle(

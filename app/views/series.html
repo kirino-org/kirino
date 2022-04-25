@@ -1,0 +1,25 @@
+{{ define "title" }}{{ .Data.Series.Title }}{{ end }}
+
+{{ define "content" }}
+<h2>{{ if eq .Data.Series.Title "" }}{{ .Data.Series.OriginalTitle }}{{ else }}{{ .Data.Series.Title }}{{ end }}</h2>
+
+{{ $ = . }}
+
+<table>
+    {{ range .Data.Series.Items }}
+        <tr>
+            <td>
+                {{ if eq .Title "" }}
+                    {{ .OriginalTitle }}
+                {{ else }}
+                    {{ .Title }}
+                {{ end }}
+            </td>
+            <td>
+                <a href="/app/play?lid={{ $.Data.Library }}&sid={{ $.Data.Series.ID }}&iid={{ .ID }}">Play</a> - 
+                <a href="/app/stream?lid={{ $.Data.Library }}&sid={{ $.Data.Series.ID }}&iid={{ .ID }}">Download</a>
+            </td>
+        </tr>
+    {{ end }}
+</table>
+{{ end }}

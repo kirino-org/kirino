@@ -1,9 +1,14 @@
 
+> **Kirino Media Server is for advanced users.**
+> 
+> A "just works" solution is coming soon.
+
 # Kirino Media Server
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/kirino-org/kirino)](https://goreportcard.com/report/github.com/kirino-org/kirino)
 [![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/kirino-org/kirino?style=flat-square)](https://codeclimate.com/github/kirino-org/kirino/maintainability)
 ![Lines of code](https://img.shields.io/tokei/lines/github/kirino-org/kirino?style=flat-square)
+[![Go Reference](https://pkg.go.dev/badge/github.com/kirino-org/kirino.svg)](https://pkg.go.dev/github.com/kirino-org/kirino)
 
 Lightweight, modular, self-hosted media server
 
@@ -17,6 +22,7 @@ Lightweight, modular, self-hosted media server
    - `go`
    - `bash`
    - `wget`
+   - `git`
  - Basic Golang experience
 
 ### Install

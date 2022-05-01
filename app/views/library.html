@@ -9,15 +9,21 @@
 <table>
     {{ range .Data.AllSeries }}
         <tr>
-            <!-- <td>
-                <img src="{{.Image}}" style="width:10rem" />
-            </td> -->
             <td>
-                {{ if eq .Title "" }}
+                <img src="{{.Image}}" style="width:10rem" />
+            </td>
+            <td>
+                <h3>
+                    {{ if eq .Title "" }}
+                        {{ .OriginalTitle }}
+                    {{ else }}
+                        {{ .Title }}
+                    {{ end }}
                     {{ .OriginalTitle }}
-                {{ else }}
-                    {{ .Title }}
-                {{ end }}
+                </h3>
+                <p>
+                    {{ .Description }}
+                </p>
             </td>
             <td>
                 <a href="/app/series?lid={{$.Data.ID}}&sid={{.ID}}">Open</a>

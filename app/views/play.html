@@ -1,15 +1,15 @@
 {{ define "title" }}Play{{ end }}
 
 {{ define "content" }}
-<h2>Enjoy :)</h2>
+<h2>{{ .Data.Series.Title }}</h2>
 
 <center>
-    <video id="player" class="player" playsinline controls src="{{ .Data }}"></video>
+    <video id="player" class="player" playsinline controls src="{{ .Data.StreamURL }}"></video>
 </center>
 
 <script src="https://cdn.plyr.io/3.7.2/plyr.polyfilled.js"></script>
 <script>
-    const player = new Plyr('video', {
+    const player = new Plyr('.player', {
         controls: [
             'play-large', // The large play button in the center
             'restart', // Restart playback

@@ -153,7 +153,13 @@ func AppRouter(c *core.Core) *http.ServeMux {
 		"sid",
 		"iid",
 	}, func(v map[string]string) interface{} {
-		return fmt.Sprintf(`/app/stream?lid=%s&sid=%s&iid=%s`, v["lid"], v["sid"], v["iid"])
+		return struct {
+			StreamURL string
+			Series    *core.Series
+		}{
+			StreamURL: fmt.Sprintf(`/app/stream?lid=%s&sid=%s&iid=%s`, v["lid"], v["sid"], v["iid"]),
+			Series:    c.Library(scsc.StrInt(v["lid"])).Series(scsc.StrInt(v["sid"])),
+		}
 	})
 
 	r.HandleFunc("/stream", func(w http.ResponseWriter, r *http.Request) {
@@ -161,23 +167,28 @@ func AppRouter(c *core.Core) *http.ServeMux {
 		sid := scsc.StrInt(r.FormValue("sid"))
 		iid := scsc.StrInt(r.FormValue("iid"))
 
-		f, err := os.Open(c.Library(lid).
+		mediaPath := c.Library(lid).
 			Series(sid).
 			Item(iid).
-			Path,
-		)
-		if err != nil {
-			panic(err)
-		}
+			Path
 
-		data, err := io.ReadAll(f)
-		if err != nil {
-			panic(err)
-		}
-
-		w.Header().Add("Content-Type", "video/mp4")
 		w.WriteHeader(200)
-		w.Write(data)
+
+		if strings.HasPrefix(mediaPath, "https://") || strings.HasPrefix(mediaPath, "http://") {
+			res, err := http.Get(mediaPath)
+			if err != nil {
+				panic(err)
+			}
+
+			io.Copy(w, res.Body)
+		} else {
+			f, err := os.Open(mediaPath)
+			if err != nil {
+				panic(err)
+			}
+
+			io.Copy(w, f)
+		}
 	})
 
 	r.Handle(

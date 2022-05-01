@@ -6,16 +6,18 @@
     {{ range .Data }}
         <tr>
             <td>
-                <img src="{{ .CoverImage }}" style="width:10rem" />
+                <img src="{{ .Image }}" style="width:10rem" />
             </td>
             <td>
                 <h4>{{ .Title }}</h4>
                 <p>{{ .Description }}</p>
             </td>
             <td>
-                <form action="{{ $.Config.BaseURL }}/"></form>
+                <button onclick="addFeed('{{.ID}}')">Add</button>
             </td>
         </tr>
     {{ end }}
 </table>
+
+<script src="/app/assets/main.js"></script>
 {{ end }}

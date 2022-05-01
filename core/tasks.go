@@ -1,28 +1,26 @@
 package core
 
-import (
-	"net/http"
-	"strings"
-)
+import "time"
 
 type Task struct {
 	ID   int    `json:"id"`
 	Name string `json:"name"`
 
+	LastRun  time.Time     `json:"last_run"`
+	RunEvery time.Duration `json:"run_every"`
+
 	Func func(c *Core) `json:"-"`
 }
 
-func runServices(c *Core) {
-	for _, s := range c.services {
-		http.Handle(
-			"/"+s.ID+"/",
+func (c *Core) Task(id int) *Task {
+	return c.task[id]
+}
 
-			http.StripPrefix(
-				strings.TrimRight("/"+s.ID+"/", "/"),
-				s.Func(c),
-			),
-		)
-	}
+func (c *Core) Tasks() []*Task {
+	return c.tasks
+}
 
-	go http.ListenAndServe(":6319", nil)
+func (c *Core) AddTask(t *Task) {
+	c.tasks = append(c.tasks, t)
+	c.task[t.ID] = t
 }

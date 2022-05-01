@@ -2,9 +2,12 @@ package api
 
 import (
 	"encoding/json"
+	"io"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	"github.com/kirino-org/kirino/core"
+	"github.com/kirino-org/kirino/internal/scsc"
 )
 
 var Service = &core.Service{
@@ -13,37 +16,78 @@ var Service = &core.Service{
 	Func: APIRouter,
 }
 
-func addAPIEndpoint(r *http.ServeMux, path string, data func() interface{}) {
-	r.HandleFunc(path, func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "application/json")
-		w.WriteHeader(200)
+func setHeaders(w http.ResponseWriter, r *http.Request) {
+	w.Header().Add("Content-Type", "application/json")
+	w.WriteHeader(200)
+}
 
-		jsonData, err := json.Marshal(data())
+func APIRouter(c *core.Core) *http.ServeMux {
+	ro := mux.NewRouter()
+
+	ro.Path("/library/{lid}/fetch").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		v := mux.Vars(r)
+		setHeaders(w, r)
+
+		l := c.Library(
+			scsc.StrInt(
+				v["lid"],
+			),
+		)
+		c.Fetch(l)
+
+		jsonData, err := json.Marshal(map[string]interface{}{
+			"kms_version": "0.1",
+			"api_version": "1",
+		})
 		if err != nil {
 			panic(err)
 		}
 
 		w.Write(jsonData)
 	})
-}
 
-func APIRouter(c *core.Core) *http.ServeMux {
-	r := http.NewServeMux()
+	ro.Path("/libraries/{lid}/add").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		v := mux.Vars(r)
 
-	addAPIEndpoint(r, "/version", func() interface{} {
-		return map[string]interface{}{
+		jsonData, err := io.ReadAll(r.Body)
+		if err != nil {
+			panic(err)
+		}
+
+		var data *core.Series
+		if err := json.Unmarshal(jsonData, &data); err != nil {
+			panic(err)
+		}
+
+		c.Library(
+			scsc.StrInt(v["lid"]),
+		).AddSeries(data)
+	})
+
+	ro.Path("/libraries").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		setHeaders(w, r)
+
+		jsonData, err := json.Marshal(c.Libraries())
+		if err != nil {
+			panic(err)
+		}
+
+		w.Write(jsonData)
+	})
+
+	ro.Path("/version").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		jsonData, err := json.Marshal(map[string]interface{}{
 			"kms_version": "0.1",
 			"api_version": "1",
+		})
+		if err != nil {
+			panic(err)
 		}
+
+		w.Write(jsonData)
 	})
 
-	addAPIEndpoint(r, "/fetchers", func() interface{} {
-		return c.Fetchers()
-	})
-
-	addAPIEndpoint(r, "/libraries", func() interface{} {
-		return c.Libraries()
-	})
-
-	return r
+	sm := http.NewServeMux()
+	sm.HandleFunc("/", ro.ServeHTTP)
+	return sm
 }

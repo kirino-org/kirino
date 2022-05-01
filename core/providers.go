@@ -1,6 +1,6 @@
 package core
 
-import "github.com/kirino-org/kirino/models"
+import "github.com/kirino-org/kirino/core/types"
 
 type Provider struct {
 	ID          string      `json:"id"`
@@ -8,7 +8,7 @@ type Provider struct {
 	Name        string      `json:"name"`
 	Description string      `json:"description"`
 
-	QueryFunc func(query string) []models.Series `json:"-"`
+	QueryFunc func(query string) []types.Song `json:"-"`
 }
 
 func (c *Core) RegisterProvider(provider *Provider) {

@@ -11,8 +11,8 @@ import (
 func main() {
 	c := core.New()
 
-	c.RegisterFetcher(invidious.Fetcher)
-	c.RegisterFetcher(podcastindex.Fetcher)
+	c.AddFetcher(invidious.Fetcher)
+	c.AddFetcher(podcastindex.Fetcher)
 
 	c.RegisterService(app.Service)
 	c.RegisterService(api.Service)
@@ -23,10 +23,19 @@ func main() {
 		Name: "Example Library",
 		MediaDirs: []string{
 			"./test",
+			"/mnt/downloads",
+			"/mnt/anime/to-process",
+			"/mnt3",
 		},
 	})
 
 	c.Library(0).Scan()
+
+	c.NewLibrary(&core.Library{
+		ID:   1,
+		Type: core.LibraryTypePodcasts,
+		Name: "Podcasts",
+	})
 
 	core.RunServices(c)
 }

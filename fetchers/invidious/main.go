@@ -56,9 +56,20 @@ var Fetcher = &core.Fetcher{
 	Name:        "Invidious",
 	Description: "Alternate frontend for YouTube",
 	SearchFunc:  searchChannel,
+	FetchFunc: func(s *core.Series) {
+		for _, v := range videosForChannel(s.OriginalID) {
+			s.AddItem(
+				&core.Item{
+					OriginalID:    v.Id,
+					Title:         v.Title,
+					OriginalTitle: v.Title,
+				},
+			)
+		}
+	},
 }
 
-func searchChannel(query string) []*core.Feed {
+func searchChannel(query string) []*core.Series {
 	urlValues := url.Values{
 		"q": {
 			query,
@@ -85,22 +96,23 @@ func searchChannel(query string) []*core.Feed {
 		panic(err)
 	}
 
-	var feeds []*core.Feed
+	var feeds []*core.Series
 
 	for _, c := range results {
-		feeds = append(feeds, &core.Feed{
-			ID:          c.Id,
-			CoverImage:  c.Avatar[len(c.Avatar)-1].URL,
-			Title:       c.Name,
-			Description: c.Description,
+		feeds = append(feeds, &core.Series{
+			OriginalID:    c.Id,
+			Image:         c.Avatar[len(c.Avatar)-1].URL,
+			Title:         c.Name,
+			OriginalTitle: c.Name,
+			Description:   c.Description,
 		})
 	}
 
 	return feeds
 }
 
-func videosForChannel(channel channel) []video {
-	res, err := http.Get(InvidiousURL + "/api/v1/channels/" + channel.Id + "/videos")
+func videosForChannel(chID string) []video {
+	res, err := http.Get(InvidiousURL + "/api/v1/channels/" + chID + "/videos")
 	if err != nil {
 		panic(err)
 	}

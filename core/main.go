@@ -3,7 +3,9 @@
 package core
 
 import (
-	"fmt"
+	"net/http"
+	"strings"
+	"time"
 )
 
 type Core struct {
@@ -37,10 +39,32 @@ func New() *Core {
 	}
 }
 
-func (c *Core) Run() {
-	fmt.Println("Starting services...")
-	runServices(c)
+func (c *Core) Start() {
+	/*
+		Set up the services
+	*/
+	for _, s := range c.services {
+		http.Handle(
+			"/"+s.ID+"/",
 
-	fmt.Println("Starting task runner...")
-	//
+			http.StripPrefix(
+				strings.TrimRight("/"+s.ID+"/", "/"),
+				s.Func(c),
+			),
+		)
+	}
+
+	// Listen on port 6319, serve default mux
+	go http.ListenAndServe(":6319", nil)
+
+	// Repeat forever or until the program exits
+	for {
+		// Iterate over all tasks
+		for _, t := range c.tasks {
+			nextRun := t.LastRun.Add(t.RunEvery)
+			if time.Now().After(nextRun) {
+				t.Func(c)
+			}
+		}
+	}
 }

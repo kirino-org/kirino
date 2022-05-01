@@ -31,20 +31,25 @@ type Library struct {
 
 	Scanner  *Scanner `json:"scanner"`
 	Provider string   `json:"provider"`
-	Fetcher  string   `json:"fetcher"`
+	Fetcher  string   `json:"Fetcher"`
 }
 
 type Series struct {
+	OriginalID    string `json:"original_id"`
 	ID            int    `json:"id"`
 	Image         string `json:"image"`
 	Title         string `json:"title"`
 	OriginalTitle string `json:"original_title"`
+	Description   string `json:"description"`
 
 	items []*Item       `json:"-"`
 	item  map[int]*Item `json:"-"`
+
+	Fetcher string `json:"Fetcher"`
 }
 
 type Item struct {
+	OriginalID    string
 	ID            int
 	Title         string
 	OriginalTitle string
@@ -101,6 +106,7 @@ func (s *Series) AddItem(item *Item) {
 // Scan Library l
 func (l *Library) Scan() {
 	regex := regexp.MustCompile(`\.(flac|ogg|mp3|mkv|mp4)`)
+	cleanRgx := regexp.MustCompile(`(?:\[|\().*(?:\]|\))`)
 	for _, mDir := range l.MediaDirs {
 		dirEntries, _ := os.ReadDir(mDir)
 		for _, entry := range dirEntries {
@@ -108,7 +114,11 @@ func (l *Library) Scan() {
 				sID := len(l.all_series)
 
 				l.AddSeries(&Series{
-					ID:            sID,
+					ID: sID,
+					Title: cleanRgx.ReplaceAllString(
+						entry.Name(),
+						" ",
+					),
 					OriginalTitle: entry.Name(),
 				})
 
@@ -118,7 +128,11 @@ func (l *Library) Scan() {
 						if d.Type().IsRegular() && regex.MatchString(d.Name()) {
 							iID := len(l.Series(sID).Items())
 							l.Series(sID).AddItem(&Item{
-								ID:            iID,
+								ID: iID,
+								Title: cleanRgx.ReplaceAllString(
+									d.Name(),
+									" ",
+								),
 								OriginalTitle: d.Name(),
 								Path:          path,
 							})

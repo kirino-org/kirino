@@ -1,0 +1,6 @@
+[paths]
+base = "/var/lib/kirino"
+
+[[library]]
+name = "YT"
+paths = ["/home/lncn/TechConn"]

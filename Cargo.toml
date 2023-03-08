@@ -1,0 +1,58 @@
+[package]
+name = "kirino"
+description = "lightweight, modular media server"
+license = " AGPL-3.0-or-later"
+homepage = "https://kirino.io"
+repository = "https://github.com/kirino-org/kirino"
+version = "0.1.0"
+edition = "2021"
+
+[features]
+default = ["image", "web"]
+web = ["dep:axum"]
+image = ["dep:image"]
+
+[dependencies]
+kirino_core = { version = "0.1.0", path = "kirino_core" }
+kirino_indexer = { version = "0.1.0", path = "kirino_indexer" }
+kirino_proto = { version = "0.1.0", path = "kirino_proto" }
+kiririn = { version = "0.1.0", path = "kiririn", features = ["rt"] }
+
+owo-colors = "3.5.0"
+serde = { version = "1.0.152", features = ["derive"] }
+toml = "0.5.11"
+
+tokio = { version = "1.24.1", features = ["rt-multi-thread", "macros", "fs"] }
+tokio-util = { version = "0.7.4", features = ["io"] }
+
+vsdbsled = "0.34.7-p1"
+
+axum = { version = "0.6.2", optional = true, default-features = false, features = ["http1", "tokio", "macros"] }
+
+image = { version = "0.24.5", optional = true }
+quinn = { version = "0.9.3", default-features = false, features = ["rustls", "webpki", "runtime-tokio"], optional = true }
+
+[workspace]
+members = [
+  "kirino_core",
+  "kirino_indexer",
+  "kirino_proto",
+  "kiririn",
+  "kr-test",
+]
+  
+  [workspace.dependencies]
+  kirino_core = { version = "0.1.0", path = "kirino_core" }
+  kirino_indexer = { version = "0.1.0", path = "kirino_indexer" }
+  kirino_proto = { version = "0.1.0", path = "kirino_proto" }
+  kiririn = { version = "0.1.0", path = "kiririn" }
+  serde = { version = "1.0.152", features = ["derive"] }
+
+[profile.release]
+opt-level = 3
+lto = true
+strip = "debuginfo"
+
+[profile.dev.package.'*']
+opt-level = 3
+strip = "debuginfo"

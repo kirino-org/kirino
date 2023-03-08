@@ -1,0 +1,18 @@
+[package]
+name = "kiririn"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "kiririn"
+required-features = ["cli"]
+
+[features]
+cli = ["dep:structopt"]
+rt = ["dep:wasmer", "dep:wasmer-wasi"]
+
+[dependencies]
+kirino_proto = { version = "0.1.0", path = "../kirino_proto" }
+structopt = { version = "0.3.26", optional = true, features = ["color", "doc"] }
+wasmer = { version = "3.1.1", default-features = false, optional = true, features = ["core", "engine", "compiler", "cranelift"] }
+wasmer-wasi = { version = "3.1.0", optional = true }

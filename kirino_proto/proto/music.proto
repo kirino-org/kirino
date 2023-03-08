@@ -1,0 +1,11 @@
+syntax = "proto3";
+package kirino.music;
+
+message Album {
+  kirino.title.Titles name = 1;
+}
+
+message Track {
+  kirino.title.Titles title = 1;
+}
+

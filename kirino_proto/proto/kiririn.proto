@@ -1,0 +1,17 @@
+syntax = "proto3";
+package kiririn;
+
+message Plugin {
+  enum Type {
+    Service  = 0;
+    Metadata = 1;
+    Fetcher  = 2;
+    Playback = 3;
+  }
+
+  Type   type = 1;
+  string name = 2;
+  string desc = 3;
+  string url  = 4;
+}
+

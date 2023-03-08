@@ -1,0 +1,12 @@
+[package]
+name = "kirino_core"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+serde = { version = "1.0.152", features = ["derive"] }
+tinyvec = "1.6.0"
+vsdbsled = "0.34.7-p1"
+
+[target.'cfg(doc)'.dependencies]
+

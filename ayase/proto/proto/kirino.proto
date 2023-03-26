@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package kirino;
+
+// Core
+import "title.proto";
+import "image.proto";
+
+//import "music.proto";
+
+// Library metadata archive
+//
+// Synced to client with metadata for entire library
+//message Archive {
+//  map<string, Item>           items  = 1;
+//  repeated kirino.music.Album albums = 2;
+//  int64         item_count = 16;
+//}
+
+message Archive {
+  repeated Item  items  = 1;
+  repeated Group groups = 2;
+}
+
+message Item {
+  enum Type {
+    Audio = 0;
+    Image = 1;
+    Text  = 2;
+    Video = 3;
+  }
+
+  Type               type = 4;
+  string             id   = 1;
+  string             name = 2;
+  kirino.image.Image img  = 3;
+}
+
+message Group {
+  enum Type {
+    Music        = 0;
+    Gallery      = 1;
+    GraphicNovel = 2;
+    TVSeries     = 3;
+    VideoSeries  = 4;
+  }
+
+  Type               type  = 1;
+  kirino.title.Title title = 2;
+  kirino.image.Image img   = 3;
+}

@@ -1,0 +1,20 @@
+{{#> base}}
+  {{#*inline "content"}}
+    <h2>Plugins</h2>
+    <input type="text" placeholder="Search..." />
+
+    <hr>
+
+    <table>
+      {{#each plugins}}
+      <tr>
+        <th class="item">{{name}}</th>
+        <td class="item">{{description}}</td>
+        <td class="item">
+          
+        </td>
+      </tr>
+      {{/each}}
+    </table>
+  {{/inline}}
+{{/base}}

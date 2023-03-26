@@ -1,0 +1,98 @@
+/*
+ * Ayase
+ * : Web UI for Kirino Media Server
+ *
+ * Made available under the Affero GNU Public License.
+ * <https://github.com/kirino-org/kirino>
+ *
+ * (c) 2021-2022 Lincoln Williams
+ */
+  
+$font: 'Falling Sky'
+$textColor: #bb00bb
+
+@font-face
+  font-family: $font
+  src: url(/assets/fallingsky.otf)
+body
+  font-family: $font
+  font-size: 20px
+  color: $textColor
+  background-color: #161616
+div > h3
+  margin-bottom: -10px
+
+.foot
+  text-align: center
+  & > *
+    padding-left: 5px
+    padding-right: 5px
+a
+  color: $textColor
+  text-decoration: none
+a:hover
+  color: #f000f0
+  text-decoration: underline
+hr
+  border-color: #242424
+th
+  padding-right: 10px
+td
+  padding-left: 5px
+  padding-right: 5px
+
+input[type=text],
+input[type=password],
+input[type=submit],
+button
+  color: $textColor
+  background-color: #242424
+  border: 0px transparent
+  border-radius: 5px
+  padding: 5px 15px 5px 15px
+  font-family: $font
+  font-size: 18px
+
+  &:hover
+    background-color: #282828
+  
+  &:active
+    border: 0px transparent
+    background-color: #363636
+
+.app
+  padding-left: 10%
+  padding-right: 10%
+.item
+  background-color: #242424
+  border: 0px transparent
+  border-radius: 5px
+  padding: 5px 5px 5px 5px
+  font-size: 18px
+.tag
+  background-color: #bb00bbbb
+  padding: 1px 5px 1px 5px
+  border-radius: 5px
+
+.carousel
+  display: flex
+  flex-wrap: wrap
+.card
+  display: flexbox
+  width: 200px
+  height: fit-content
+  min-height: 300px
+  padding: 5px 5px 5px 5px
+
+  background-color: #242424
+  border-radius: 2px
+
+  & > img
+    display: flexbox
+    width: 200px
+    height: max-content
+
+svg
+  fill: white
+  width: 18px
+  height: 18px

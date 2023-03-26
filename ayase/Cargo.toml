@@ -1,0 +1,46 @@
+[package]
+name = "ayase"
+description = "GUI client for Kirino Media Server"
+license = "AGPL-3.0-or-later"
+version = "0.1.0"
+edition = "2021"
+#build = "build.rs"
+
+#[lib]
+#name = "ayase"
+#path = "src/main.rs"
+#crate-type = ["cdylib"]
+
+[features]
+default = ["desktop"]
+desktop = ["surf/h1-client-rustls", "dep:tokio", "dep:libmpv"]
+web = ["surf/wasm-client"]
+
+[dependencies]
+eframe = { version = "0.20.1", default-features = false, features = ["wgpu", "default_fonts", "dark-light"] }
+egui-android = { git = "https://github.com/jb55/egui-android.git", version = "0.1.0" }
+image = { version = "0.24", default-features = false, features = ["jpeg", "png"] }
+kirino_proto = { version = "0.1.0", path = "../kirino_proto" }
+libmpv = { version = "2.0.1", optional = true }
+surf = { version = "2.3.2", default-features = false }
+tokio = { version = "1.26.0", features = ["rt-multi-thread", "macros"], optional = true }
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+wasm-bindgen = "0.2.84"
+wasm-bindgen-futures = "0.4"
+console_error_panic_hook = "0.1.6"
+
+[profile.release]
+opt-level = 3
+lto = true
+strip = true
+
+[profile.dev.package.'*']
+opt-level = 3
+strip = true
+
+#[build-dependencies]
+#pkg-config = "0.3.26"
+
+[package.metadata.bundle]
+identifier = "io.kirino.ayase"

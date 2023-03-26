@@ -1,0 +1,101 @@
+disable_all_formatting = false
+unstable_features = true
+
+edition = "2021"
+version = "One"
+
+format_strings = false
+format_macro_matchers = true
+format_macro_bodies = true
+
+# Width
+max_width = 90
+fn_call_width = 60
+attr_fn_like_width = 70
+struct_lit_width = 18
+struct_variant_width = 35
+array_width = 60
+chain_width = 60
+single_line_if_else_max_width = 50
+doc_comment_code_block_width = 100
+comment_width = 80
+
+# Wrapping
+wrap_comments = true
+
+# Comments
+format_code_in_doc_comments = true
+
+# Imports
+imports_indent = "Block"
+imports_layout = "Mixed"
+imports_granularity = "Crate"
+group_imports = "StdExternalCrate"
+
+# Reordering
+reorder_imports = true
+reorder_modules = true
+reorder_impl_items = false
+
+# Normalization
+normalize_comments = true
+normalize_doc_attributes = true
+
+# Spaces
+space_before_colon = false
+space_after_colon = true
+spaces_around_ranges = false
+
+# Single liners
+empty_item_single_line = true
+struct_lit_single_line = true
+fn_single_line = true
+where_single_line = false
+
+# Tabs
+hard_tabs = false
+tab_spaces = 2
+
+# Misc
+binop_separator = "Front"
+remove_nested_parens = true
+short_array_element_width_threshold = 10
+overflow_delimited_expr = false
+struct_field_align_threshold = 0
+enum_discrim_align_threshold = 0
+match_arm_blocks = true
+match_arm_leading_pipes = "Never"
+force_multiline_blocks = false
+fn_args_layout = "Tall"
+brace_style = "SameLineWhere"
+control_brace_style = "AlwaysSameLine"
+trailing_semicolon = true
+trailing_comma = "Vertical"
+match_block_trailing_comma = false
+blank_lines_upper_bound = 1
+blank_lines_lower_bound = 0
+inline_attribute_width = 0
+force_explicit_abi = true
+color = "Auto"
+required_version = "1.5.1"
+
+# Merge, Condense, Combine
+combine_control_expr = true
+merge_derives = true
+condense_wildcard_suffixes = true
+
+# Shorthands
+use_try_shorthand = true
+use_field_init_shorthand = true
+
+# rustfmt Behavior
+make_backup = true
+emit_mode = "Files"
+ignore = []
+skip_children = false
+format_generated_files = true
+	# Errors
+	hide_parse_errors = false
+	error_on_line_overflow = false
+	error_on_unformatted = false
+

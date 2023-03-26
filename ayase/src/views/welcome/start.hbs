@@ -1,0 +1,15 @@
+{{#> base}}
+  {{#*inline "content"}}
+    <div id="start">
+      <h2>{{i18n "welcome-title"}}</h2>
+
+      <p>{{i18n "welcome-text"}}</p>
+      <p>{{i18n "welcome-lets-go"}}</p>
+
+      <button onclick="document.getElementById('start').hidden = true; document.getElementById('account').hidden = false;">{{i18n "welcome-ok"}}</button>
+    </div>
+    <div id="account" hidden>
+      {{> welcome/account}}
+    </div>
+  {{/inline}}
+{{/base}}

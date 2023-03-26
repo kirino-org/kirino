@@ -1,0 +1,15 @@
+[package]
+name = "kirino_proto"
+version = "0.1.0"
+edition = "2021"
+build = "build.rs"
+
+[features]
+
+[dependencies]
+prost = { version = "0.11.6", default-features = false, features = ["prost-derive"] }
+prost-types = { version = "0.11.6", default-features = false }
+uuid = { version = "1.3.0", features = ["v8", "serde"] }
+
+[build-dependencies]
+prost-build = "0.11.6"

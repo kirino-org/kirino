@@ -1,6 +1,0 @@
-syntax = "proto3";
-package kirino.image;
-
-message Image {
-  string id = 1;
-}

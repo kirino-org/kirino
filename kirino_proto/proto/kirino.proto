@@ -4,7 +4,7 @@ package kirino;
 
 // Core
 import "title.proto";
-import "image.proto";
+import "visual.proto";
 
 //import "music.proto";
 
@@ -24,28 +24,33 @@ message Archive {
 
 message Item {
   enum Type {
-    Audio = 0;
-    Image = 1;
-    Text  = 2;
-    Video = 3;
+    NonMedia = 0;
+    
+    Photo   = 1;
+    Audio   = 2;
+    Video   = 3;
+    Archive = 4;
   }
 
-  Type               type = 4;
-  string             id   = 1;
-  string             name = 2;
-  kirino.image.Image img  = 3;
+  Type               type   = 4;
+  string             id     = 1;
+  string             name   = 2;
+  repeated Thumbnail thumbs = 5;
 }
 
 message Group {
-  enum Type {
-    Music        = 0;
-    Gallery      = 1;
-    GraphicNovel = 2;
-    TVSeries     = 3;
-    VideoSeries  = 4;
-  }
-
-  Type               type  = 1;
-  kirino.title.Title title = 2;
-  kirino.image.Image img   = 3;
+  kirino.title.Title title  = 2;
+  repeated Thumbnail thumbs = 3;
 }
+
+message Thumbnail {
+  string             id   = 1;
+  kirino.visual.Size size = 2;
+}
+
+//message Audio {
+//  string name          = 1;
+//  // Sample rate in Hz
+//  int32  sample_rate   = 2;
+//  int8   bit_depth     = 3;
+//}

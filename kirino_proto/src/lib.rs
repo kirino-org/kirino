@@ -7,5 +7,4 @@ pub mod proto {
   include!(concat!(env!("OUT_DIR"), "/_includes.rs"));
 }
 
-pub use kirino::*;
 pub use proto::*;
